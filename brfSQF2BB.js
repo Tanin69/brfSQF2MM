@@ -1,10 +1,11 @@
 /*
 	Conversion de breifing.sqf en BBCODE
+    Auteur : tanin69
     v1.0, du 15/02/2020 :
     - Version initiale
     v1.1, du 16/02/2020 :
-    - Copie automatiquement le BBCODE obtenu dans le presse papier
-	Auteur : tanin69
+    - Ajout de messages
+
 */
 
 /* TODO
