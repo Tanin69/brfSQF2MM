@@ -7,19 +7,20 @@
 	    Auteur : tanin69
         v1.1, du 16/02/2020 :
         - Refonte complète du visuel
-        - Copie automatiquement le BBCODE obtenu dans le presse papier
-        - Ajout de l'import d'un fichier briefing
         - Ajout de messages
     -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Convertisseur de briefing SQF vers BBCODE</title>
     <style>
+        
+      
         body {
+
             font-family:bangers, sans-serif;
             background-color: #ece8dc;
         }
-        
+
         .row {  
             display: flex;
             flex-wrap: wrap;
@@ -94,6 +95,14 @@
             background-color: #2aac25;
         }
 
+        #message_success_insEntete {
+            display: none;
+            color: white;
+            padding: 10px 10px;
+            border-radius: 15px;
+            background-color: #2aac25;
+        }
+
         #message_fail_notext {
             display: none;
             color: white;
@@ -117,14 +126,16 @@
 </head>
 
 <body>
-
-
+    <h1>Outil de conversion de briefing au format sqf vers BBCODE</h1>
+    <span>Version 1.2 du 16/02/2020</span>
     <div class="row">
         <div class="column side">
-            <span class="etiquette">briefing.sqf</span><input id="file" type="file" class="button" />
+            <input id="file" type="file" class="button" />
+            <input type="button" class="button" value="Insérer entête" onclick="insereEntete();"/>
             <input type="button" class="button" value="Effacer" onclick="document.getElementById('textarea1').value = '';"/>
             <span id="message_success_copyPP">BBCode copié dans le presse-papier</span>
             <span id="message_success_loadfile">Fichier chargé</span>
+            <span id="message_success_insEntete">Entête insérée</span>
             <span id="message_fail_notext">Aucun texte à convertir !</span>
             <textarea id="textarea1" rows="40" placeholder="Copier le texte du briefing.sqf ou ouvrir un fichier..."></textarea>
         </div>
@@ -136,7 +147,7 @@
             <br /><br />
         </div>
         <div class="column side">
-            <span class="etiquette">BBCode</span><input type="button" class="button" value="Effacer" onclick="document.getElementById('textarea2').value = '';"/>           
+            <input type="button" class="button" value="Effacer" onclick="document.getElementById('textarea2').value = '';"/>           
             <textarea id="textarea2" rows="40"></textarea>
         </div>
     </div>

@@ -5,14 +5,12 @@
     - Version initiale
     v1.1, du 16/02/2020 :
     - Ajout de messages
+    - Copie automatiquement le BBCODE obtenu dans le presse papier
+    - Ajout de l'import d'un fichier briefing
+    - Correction des retours à la ligne
+
 
 */
-
-/* TODO
-- Donner à manger un fichier au lieu d'un copier/coller
-- Améliorer la gestion des retours à la ligne
-- Copier automatiquement le texte résultat dans le presse-papier 
-
 
 // L'entête ci-desous doit être collée dans le briefing
 
@@ -49,12 +47,13 @@ var fileInput = document.querySelector('#file');
 fileInput.addEventListener('change', function() {
     var reader = new FileReader();
     reader.addEventListener('load', function() {
-        //alert('Contenu du fichier "' + fileInput.files[0].name + '" :\n\n' + reader.result);
         $('#message_success_loadfile').fadeIn('slow').delay(2000).fadeOut('slow');
         document.getElementById("textarea1").value = reader.result;
     });
     reader.readAsText(fileInput.files[0]);
 });
+
+
 function brfSQF2BB() {
     //Le texte à traiter : intégralité du fichier briefing.sqf
 
@@ -68,8 +67,8 @@ function brfSQF2BB() {
     //Chaine finale qui sera envoyée dans le textArea de résultat
     var s = "";
     //Délimiteur de retour à la ligne pour le textAera en BBCODE
-    var delim = '\n';
-	
+    var delim = '\r';
+
     //Nettoie toutes les balises sqf qui peuvent l'être (ce qui est fait n'est plus à faire)
     var maRegex = /player\s+creatediaryrecord\s*\[\s*"diary"\s*,\s*\[/gmi;
     txt = txt.replace(maRegex,'');
@@ -114,14 +113,14 @@ function brfSQF2BB() {
         //Les onglets d'indice pair sont des titres d'onglet (si tout va bien :-) )
         if ((indOnglets)%2 === 0) {
             //On met en forme le titre du sous-onglet avec BBFormat_TITLE1
-            let reg = /BBFormat_TITLE1(.+)-\//i;
+            reg = /BBFormat_TITLE1(.+)-\//i;
             var fmtOnglet = (reg.exec(txt))[1].trim();
             result = fmtOnglet.replace(/rpltext/, contenu);
             //et on insère dans le tableau de résultat
             tbResult.unshift(result);
         }
         else { //Les autres sont donc des contenus d'onglet (si tout va bien)                                
-            //On traite le texte en mode brutal : on remplace les doubles <br /> par un \n et on supprime les simples <br />
+            //On traite le texte en mode brutal : on remplace les doubles <br /> par un delim et on supprime les simples <br />
             restmp = contenu.replace(/(<\s*br\s*\/\s*>){2}/gi,delim);
             result = restmp.replace(/<\s*br\s*\/\s*>/gi,'');
             //Et on insère au bon endroit
@@ -144,6 +143,10 @@ function brfSQF2BB() {
     tbResult.unshift ( fn_regRpl (txt, /BBFormat_MAP(.+)-\//,         /BB_MAP(.+)-\//));
     tbResult.unshift ( fn_regRpl (txt, /BBFormat_TITLE(.+)-\//,       /BB_TITLE(.+)-\//));
     
+        
+    //Supprime tous les retours à la ligne pour en insérer proprement au bons endroits
+    txt = txt.replace(/\r?\n/gi,"");
+
     //On envoie le résultat dans le textarea en parcourant le tableau
     for (i=0;i < tbResult.length; i++) {
         s = s+delim+tbResult[i];
@@ -165,4 +168,41 @@ function fn_regRpl (stxt,reg1,reg2) {
     reg2.exec(stxt);
     let reg2s = ((RegExp.$1).trim());
     return reg1s.replace(/rpltext/, reg2s)
+}
+
+function insereEntete() {
+    txt = document.getElementById("textarea1").value;
+    enTete = `
+// DEBUT ENTETE 
+/*	MODIFIEZ CI-DESSOUS : Titre, map, auteur, etc.
+BB_TITLE          XXXXXXXXXXX -/
+BB_MAP            XXXXXXXXXXX -/
+BB_AUTHOR         XXXXXXXXXXX -/
+BB_COMMENT        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -/
+BB_IMG            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -/
+BB_IMG_SBTITLE    XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -/
+*/
+    
+/* NE TOUCHEZ RIEN ci-dessous si vous ne savez pas ce que vous faites !
+// Définition des mises en forme BBCode
+BBFormat_TITLE        [b][color=#0000FF][size=150]rpltext[/size][/color][/b] -/  Grande taille, gras, bleu
+BBFormat_TITLE1       [color=#0000FF][b][u]rpltext[/u][/b][/color]           -/  Gras, souligné, bleu
+BBFormat_MAP          [b][color=#0000FF]Map: rpltext[/color][/b]             -/  Gras, bleu
+BBFormat_AUTHOR       [b][color=#0000FF]Auteur: rpltext[/color][/b]          -/  Gras, bleu
+BBFormat_Comment      [b][color=#BF0000]rpltext[/color][/b]                  -/  Gras, rouge
+BBFormat_IMG          [img]rpltext[/img]                                     -/  Image au format simple
+BBFormat_IMG_SBTITLE  [i]rpltext[/i]                                         -/  Italique, noir
+// Correspondances des mises en forme : SQF2BBC COLSQF  'Format BBCODE'
+SQF2BBC  <font color='#ff0505'>rpltext</font color> '[color=#ff0505]rpltext[/color]'        -/  rouge -> rouge                        
+SQF2BBC  <font color='#5ACE00'>rpltext</font color> '[color=#ff0505]rpltext[/color]'        -/  vert -> rouge
+SQF2BBC  <font color='#ff9605'>rpltext</font color> '[i][color=#ff9605]rpltext[/color][/i]' -/  orange -> Italique, orange
+*/
+    
+/* FIN ENTETE */
+
+`;
+
+    document.getElementById("textarea1").value = enTete + "\r" + txt;
+
+    $('#message_success_insEntete').fadeIn('slow').delay(2000).fadeOut('slow');
 }
