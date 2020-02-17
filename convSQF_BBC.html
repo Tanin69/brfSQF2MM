@@ -8,10 +8,14 @@
         v1.1, du 16/02/2020 :
         - Refonte complète du visuel
         - Ajout de messages
+        v1.3 du 17/02
+        - Nouvelle refonte de l'UI -> w3-css
     -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Convertisseur de briefing SQF vers BBCODE</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+    <!--
     <style>
         
       
@@ -86,7 +90,9 @@
             margin-left: auto;
             margin-right: auto;
         }
-
+    </style>
+    -->
+    <style>
         #message_success_copyPP {
             display: none;
             color: white;
@@ -118,38 +124,53 @@
             border-radius: 15px;
             background-color: #2aac25;
         }
-
     </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Convertisseur de briefing SQF vers BBCODE</title>
 </head>
 
-<body>
-    <h1>Outil de conversion de briefing au format sqf vers BBCODE</h1>
-    <span>Version 1.2 du 16/02/2020</span>
-    <div class="row">
-        <div class="column side">
-            <input id="file" type="file" class="button" />
-            <input type="button" class="button" value="Insérer entête" onclick="insereEntete();"/>
-            <input type="button" class="button" value="Effacer" onclick="document.getElementById('textarea1').value = '';"/>
+<body class="w3-light-gray">
+    <header class="w3-container w3-blue-gray">
+        <h2>
+            Conversion de briefing.sqf vers BBCODE
             <span id="message_success_copyPP">BBCode copié dans le presse-papier</span>
             <span id="message_success_loadfile">Fichier chargé</span>
             <span id="message_success_insEntete">Entête insérée</span>
             <span id="message_fail_notext">Aucun texte à convertir !</span>
-            <textarea id="textarea1" rows="40" placeholder="Copier le texte du briefing.sqf ou ouvrir un fichier..."></textarea>
+        </h2>
+    </header>
+    <span></span>
+    <div class="w3-row">
+        <div class="w3-col w3-container" style="width:45%">
+            <div class="w3-bar w3-padding-small">
+                <input id="file" type="file">
+                <button class="w3-btn w3-flat-midnight-blue w3-round-large" onclick="insereEntete();">Insérer entête</btn>
+                <button class="w3-btn w3-flat-midnight-blue w3-round-large w3-right" onclick="document.getElementById('textarea1').value = '';">Effacer</btn>
+            </div>
+            <form class="w3-panel w3-card-4">
+                <header class="w3-container w3-light-grey" ><h5>SQF</h5></header>
+                <textarea id="textarea1" class="w3-input" rows="30" placeholder="Copier le texte du briefing.sqf ou ouvrir un fichier..."></textarea>
+            </form>
         </div>
-        <div class="column middle">
-            <br /><br /><br /><br />
-            <input type="button" class="button" onclick="brfSQF2BB();" value="Convertir" />
-            <br /><br />
-            <script src="brfSQF2BB.js"></script>
-            <br /><br />
+        <div class="w3-col w3-container" style="width:10%">
+            <div class="w3-bar">
+                <button class="w3-btn w3-flat-midnight-blue w3-round-large w3-display-middle" onclick="brfSQF2BB();">Convertir</btn>
+                <script src="brfSQF2BB.js"></script>
+            </div>
         </div>
-        <div class="column side">
-            <input type="button" class="button" value="Effacer" onclick="document.getElementById('textarea2').value = '';"/>           
-            <textarea id="textarea2" rows="40"></textarea>
+        <div class="w3-col w3-container" style="width:45%">
+            <div class="w3-bar w3-padding-small">
+                <button class="w3-btn w3-flat-midnight-blue w3-round-large w3-right" onclick="document.getElementById('textarea2').value = '';">Effacer</btn>           
+            </div>           
+            <form class="w3-panel w3-card-4">
+                <header class="w3-container w3-light-grey"><h5>BBCODE</h5></header>
+                <textarea id="textarea2" class="w3-input" rows="30"></textarea>
+            </form>
         </div>
     </div>
+    <footer class="w3-container w3-blue-gray">
+        <p>Version 1.3 du 17/02/2020 - <a href="https://github.com/Tanin69/brfSQF2MM" target="_blank">https://github.com/Tanin69/brfSQF2MM</a></p>
+    </footer>
+      
 </body>
 </html>
