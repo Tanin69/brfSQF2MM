@@ -10,90 +10,17 @@
         - Ajout de messages
         v1.3 du 17/02
         - Nouvelle refonte de l'UI -> w3-css
+        18/02
+        - Ajout d'une aide en ligne
     -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
     <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
-    <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
-        
-      
-        body {
-
-            font-family:bangers, sans-serif;
-            background-color: #ece8dc;
-        }
-
-        .row {  
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        /* Left and right column */
-        .side {
-            flex: 45%;
-        }
-
-        /* Middle column */
-        .middle {
-            flex: 10%;
-            display:table;
-        }
-
-        /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-        @media screen and (max-width: 700px) {
-            .row {   
-                flex-direction: column;
-            }
-        }
-
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        .button {
-            background-color: #7e6945;
-            border: #654c22;
-            color: white;
-            padding: 18px 18px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            cursor: pointer;
-            border-radius: 4px;
-            min-width: 130px;
-        }
-
-        .button:hover {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        }
-
-        .etiquette {
-            font-size: 14px;
-            font-weight: bold;
-            height: 100px;
-            margin:30px;
-        }
-
-        textarea {
-            width: 90%;
-            padding:3px;
-            background-color: #F1F1F1;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
-    -->
-    <style>
-        #message_success_copyPP {
+        .msg_success {
+            font-size: medium;
             display: none;
             color: white;
             padding: 10px 10px;
@@ -101,15 +28,8 @@
             background-color: #2aac25;
         }
 
-        #message_success_insEntete {
-            display: none;
-            color: white;
-            padding: 10px 10px;
-            border-radius: 15px;
-            background-color: #2aac25;
-        }
-
-        #message_fail_notext {
+        .msg_fail {
+            font-size: medium;
             display: none;
             color: white;
             padding: 10px 10px;
@@ -117,13 +37,6 @@
             background-color: #cc1c1c;
         }
 
-        #message_success_loadfile {
-            display: none;
-            color: white;
-            padding: 10px 10px;
-            border-radius: 15px;
-            background-color: #2aac25;
-        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Convertisseur de briefing SQF vers BBCODE</title>
@@ -132,14 +45,35 @@
 <body class="w3-light-gray">
     <header class="w3-container w3-blue-gray">
         <h2>
-            Conversion de briefing.sqf vers BBCODE
-            <span id="message_success_copyPP">BBCode copié dans le presse-papier</span>
-            <span id="message_success_loadfile">Fichier chargé</span>
-            <span id="message_success_insEntete">Entête insérée</span>
-            <span id="message_fail_notext">Aucun texte à convertir !</span>
+            Conversion de briefing.sqf vers BBCODE 
+            <i class="material-icons w3-right" style="font-size:36px" onclick="document.getElementById('help').style.display='block'">help</i>
+            <span id="message_success_copyPP" class="msg_success">BBCode copié dans le presse-papier</span>
+            <span id="message_success_loadfile" class="msg_success">Fichier chargé</span>
+            <span id="message_success_insEntete" class="msg_success">Entête insérée</span>
+            <span id="message_fail_notext" class="msg_fail">Aucun texte à convertir !</span>
         </h2>
     </header>
-    <span></span>
+    <!-- Aide -->
+    <div id="help" class="w3-modal">
+        <div class="w3-modal-content w3-card-4">
+            <div class="w3-container">
+                <header class="w3-container"> 
+                    <span onclick="document.getElementById('help').style.display='none'" class="w3-display-topright">&times;</span>
+                    <h2>Comment utiliser cet outil ?</h2>
+                </header>
+                <ul class="w3-ul w3-hoverable">
+                    <li class="w3-padding w3-large"><b>1. </b>Insérez un fichier briefing.sqf dans la zone de texte de gauche 'SQF' (par glisser/déposer, en cliquant sur le bouton "Parcourir" ou par copier/coller du presse papier).</li>
+                    <li class="w3-padding w3-large"><b>2. </b>Insérez l'entête en cliquant sur le bouton "Ajouter entête" : l'entête est ajoutée en début de texte dans la zone de texte 'SQF'.</li>
+                    <li class="w3-padding w3-large"><b>3. </b>Saisissez les informations de l'entête (titre, map, auteur, etc.).</li>
+                    <li class="w3-padding w3-large"><b>4. </b>Cliquez sur le bouton "Convertir" : le texte au format BBCODE est copié dans le presse papier et dans la zone de texte de droite 'BBCODE'.</li>
+                    <li class="w3-padding w3-large"><b>5. </b>Copiez le code dans un message de forum acceptant le BBCODE (ex. grecedecanards.fr ou forum CPC).</li>
+                </ul>
+                <div class="w3-panel w3-light-grey">
+                    Accéder à l'aide complète :<a href="https://github.com/Tanin69/brfSQF2MM" target="_blank">https://github.com/Tanin69/brfSQF2MM</a>
+                </div>                
+            </div>
+        </div>
+    </div>
     <div class="w3-row">
         <div class="w3-col w3-container" style="width:45%">
             <div class="w3-bar w3-padding-small">
